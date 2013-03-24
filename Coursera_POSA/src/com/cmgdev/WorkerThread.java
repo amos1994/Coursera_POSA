@@ -33,7 +33,7 @@ public abstract class WorkerThread extends Thread
 		{
 			try
 			{
-				// System.out.println("sleeping " + sleepSeconds);
+				 System.out.println("sleeping " + sleepSeconds);
 				Thread.sleep(random.nextInt(sleepSeconds * 1000));
 				doWork();
 			}
