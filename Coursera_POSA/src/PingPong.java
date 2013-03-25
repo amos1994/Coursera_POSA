@@ -1,4 +1,3 @@
-
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -17,17 +16,18 @@ public class PingPong
 		t1.start();
 		t2.start();
 
-		while (true)
+		while (t1.keepRunning && t2.keepRunning)
 		{
-			if (t1.numRuns > 3 && t2.numRuns > 3)
+			if (t1.numRuns >= 3)
 			{
-				synchronized (lock)
-				{
-					System.out.println("Done!");
-					System.exit(0);
-				}
+				t1.keepRunning = false;
+			}
+			if (t2.numRuns >= 3)
+			{
+				t2.keepRunning = false;
 			}
 		}
+		System.out.println("Done!");
 	}
 
 	static class PingPongThread extends Thread
@@ -35,6 +35,7 @@ public class PingPong
 		int numRuns = 0;
 		String name;
 		boolean hasLock = false;
+		boolean keepRunning = true;
 		PingPongThread other;
 
 		PingPongThread(String name)
@@ -45,7 +46,7 @@ public class PingPong
 		@Override
 		public void run()
 		{
-			while (true)
+			while (keepRunning)
 			{
 				if (hasLock)
 				{
